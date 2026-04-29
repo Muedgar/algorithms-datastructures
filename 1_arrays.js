@@ -519,3 +519,306 @@ function trap(height) {
 
     return water;
 }
+
+function trapStack(height) {
+    const stack = [];
+    let water = 0;
+
+    for (let i = 0; i < height.length; i++) {
+        while (
+            stack.length > 0 &&
+            height[i] > height[stack[stack.length - 1]]
+        ) {
+            const bottom = stack.pop();
+
+            if (stack.length === 0) break;
+
+            const leftWall = stack[stack.length - 1];
+            const width = i - leftwall - 1;
+            const boundedHeight = Math.min(height[i], height[leftWall] - height[bottom]);
+
+            water += width * boundedHeight;
+        }
+
+        stack.push(i);
+    }
+
+    return water;
+}
+
+// 24. Container With Most Water
+function maxArea(height) {
+    let left = 0;
+    let right = height.length - 1;
+    let best = 0;
+
+    while (left < right) {
+        const width = right - left;
+        const h = Math.min(height[left], height[right]);
+
+        best = Math.max(best, width * h);
+
+        if (height[left] < height[right]) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+
+    return best;
+}
+
+// 25. 3Sum
+function threeSum(nums) {
+    nums.sort((a, b) => a - b);
+
+    const result = [];
+
+    for (let i = 0; i < nums.length - 2; i++) {
+        if (i > 0 && nums[i] === nums[i - 1]) continue;
+
+        let left = i + 1;
+        let right = nums.length - 1;
+
+        while (left < right) {
+            const sum = nums[i] + nums[left] + nums[right];
+
+            if (sum === 0) {
+                result.push([nums[i], nums[left], nums[right]]);
+
+                while (left < right && nums[left] === nums[left + 1]) left++;
+                while (left < right && nums[right] === nums[right - 1]) right --;
+
+                left++;
+                right--;
+            } else if (sum < 0) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+    }
+
+    return result;
+}
+
+// 26. 4Sum
+function fourSum(nums, target) {
+    nums.sort((a, b) => a - b);
+
+    const result = [];
+    const n = nums.length;
+
+    for (let i = 0; i < n - 3; i++) {
+        if (i > 0 && nums[i] === nums[i - 1]) continue;
+
+        // Pruning
+        const min1 = nums[i] + nums[i + 1] + nums[i + 2] + nums[i + 3];
+        if(min1 > target) break;
+
+        const max1 = nums[i] + nums[n - 1] + nums[n - 2] + nums[n - 3];
+        if(max1 < target) continue;
+
+        for (let j = i + 1; j < n - 2; j++) {
+            if (j > i + 1 && nums[j] === nums[j - 1]) continue;
+
+            const min2 = nums[i] + nums[j] + nums[j + 1] + nums[j + 2];
+            if(min2 > target) break;
+
+            const max2 = nums[i] + nums[j] + nums[n - 1] + nums[n - 2];
+            if (max2 < target) continue;
+
+            let left = j + 1;
+            let right = n - 1;
+
+            while (left < right) {
+                const sum = nums[i] + nums[j] + nums[left] + nums[right];
+
+                if (sum === target) {
+                    result.push([nums[i], nums[j], nums[left], nums[right]]);
+
+                    while (left < right && nums[left] === nums[left + 1]) left++;
+                    while (left < right && nums[right] === nums[right - 1]) right--;
+
+                    left++;
+                    right--;
+                } else if (sum < target) {
+                    left++;
+                } else {
+                    right--;
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+// 27. Minimum Swaps Required to Group All 1s Together
+function minSwapsGroupOnes(nums) {
+    const ones = nums.reduce((sum, num) => sum + num, 0);
+
+    if (ones <= 1) return 0;
+
+    let currentOnes = 0;
+    let maxOnesInWindow = 0;
+
+    for (let i = 0; i < nums.length; i++) {
+        currentOnes += nums[i];
+
+        if (i >= ones) {
+            currentOnes -= nums[i - ones];
+        }
+
+        maxOnesInWindow = Math.max(maxOnesInWindow, currentOnes);
+    }
+
+    return ones - maxOnesInWindow;
+}
+
+// 28. Median of Two Sorted Arrays
+function findMedianSortedArrays(nums1, nums2) {
+    if (nums1.length > nums2.length) {
+        return findMedianSortedArrays(nums2, nums1);
+    }
+
+    const m = nums1.length;
+    const n = nums2.length;
+
+    let left = 0;
+    let right = m;
+
+    while (left <= right) {
+        const partitionA = Math.floor((left + right) / 2);
+        const partitionB = Math.floor((m + n + 1) / 2) - partitionA;
+
+        const maxLeftA = partitionA === 0 ? -Infinity : nums1[partitionA - 1];
+
+        const minRightA = partitionA === m ? Infinity : nums1[partitionA];
+
+        const maxLeftB = partitionB === 0 ? -Infinity : nums2[partitionB - 1];
+
+        const minRightB = partitionB === n ? Infinity : nums2[partitionB];
+
+        if (maxLeftA <= minRightB && maxLeftB <= minRightA) {
+            if ((m + n) % 2 === 1) {
+                return Math.max(maxLeftA, maxLeftB);
+            }
+
+            return (
+                Math.max(maxLeftA, maxLeftB) + 
+                Math.min(minRightA, minRightB)
+            ) / 2;
+        }
+
+        if (maxLeftA > minRightB) {
+            right = partitionA - 1;
+        } else {
+            left = partitionA + 1;
+        }
+    }
+
+    throw new Error("Input arrays are not sorted.")
+}
+
+// 29. Count Inversions in an Array
+function countInversions(nums) {
+    const arr = [...nums];
+
+    function mergeSort(left, right) {
+        if (left >= right) return 0;
+
+        const mid = Math.floor((left + right) / 2);
+
+        let count = 0;
+        count += mergeSort(left, mid);
+        count += mergeSort(mid + 1, right);
+        count += mergeSort(left, mid, right);
+
+        return count;
+    }
+
+    function merge(left, mid, right) {
+        const temp = [];
+        let i = left;
+        let j = mid + 1;
+        let count = 0;
+
+        while (i <= mid && j <= right) {
+            if (arr[i] <= arr[j]) {
+                temp.push(arr[i]);
+                i++;
+            } else {
+                temp.push(arr[j]);
+
+                count += mid - i + 1;
+                
+                j++;
+            }
+        }
+
+        while (i <= mid) {
+            temp.push(arr[i]);
+            i++;
+        }
+
+        while (j <= right) {
+            temp.push(arr[j]);
+            j++;
+        }
+
+        for (let k = 0; k < temp.length; k++) {
+            arr[left + k] = temp[k];
+        }
+
+        return count;
+    }
+
+    return mergeSort(0, arr.length - 1);
+}
+
+// 30. Rotate N×N Matrix 90° Clockwise In-Place
+function rotateClockwise(matrix) {
+    const n = matrix.length;
+
+    // transpose
+    for (let r = 0; r < n; r++) {
+        for (let c = r + 1; c < n; c++) {
+            [matrix[r][c], matrix[c][r]] = [matrix[c][r], matrix[r][c]];
+        }
+    }
+
+    // reverse each row
+    for (let r = 0; r < n; r++) {
+        matrix[r].reverse();
+    }
+
+    return matrix;
+}
+
+// 31. Rotate N×N Matrix 90° Anti-Clockwise In-Place
+function rotateAntiClockwise(matrix) {
+    const n = matrix.length;
+
+    // transpose
+    for (let r = 0; r < n; r++) {
+        for (let c = r + 1; c < n; c++) {
+            [matrix[r][c], matrix[c][r]] = [matrix[c][r], matrix[r][c]];
+        }
+    }
+
+    // reverse each column
+    for (let c = 0; c < n; c++) {
+        let top = 0;
+        let bottom = n - 1;
+
+        while (top < bottom) {
+            [matrix[top][c], matrix[bottom][c]] = [matrix[bottom][c], matrix[top][c]];
+
+            top++;
+            bottom--;
+        }
+    }
+
+    return matrix;
+}
