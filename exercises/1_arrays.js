@@ -29,3 +29,13 @@ function reverse(nums, left, right) {
 
 
 console.log(rotate1DArray([1,2,3,4,5,6,7], 3))
+
+function reverseTwo(nums, left, right) {
+    while (left < right) {
+        [nums[left], nums[right]] = [nums[right], nums[left]];
+        left++;
+        right--;
+    }
+
+    return nums;
+}
