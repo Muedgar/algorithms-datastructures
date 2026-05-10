@@ -32,7 +32,7 @@ function cyclicRotation(nums, k) {
     let count = 0;
     let n = nums.length;
 
-    for (let start = 0; count < n - 1; start++) {
+    for (let start = 0; count < n; start++) {
         let current = start;
         let prev = nums[start];
 
@@ -52,3 +52,32 @@ function cyclicRotation(nums, k) {
 }
 
 console.log(cyclicRotation([1,2,3,4,5,6,7], 3));
+
+function cyclicRotation2(nums, k) {
+    let n = nums.length;
+
+    if (n === 0) return nums;
+
+    k = k % n;
+
+    let count = 0;
+
+    for (let start = 0; count < n; start++) {
+        let current = start;
+        let prev = nums[start];
+
+        do {
+            let next = ( current + k ) % n;
+            let temp = nums[next];
+            nums[next] = prev;
+
+            prev = temp;
+            current = next;
+            count++;
+        } while (start !== current)
+    }
+
+    return nums.join("  ");
+}
+
+console.log(cyclicRotation2([1,2,3,4,5,6,7], 3));
