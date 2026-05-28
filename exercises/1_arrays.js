@@ -111,31 +111,54 @@
 
 // console.log(searchTarget([4,5,6,7,1,2,3], 2))
 
-function countRotations(nums) {
-    let left = 0;
-    let right = nums.length - 1;
+// function countRotations(nums) {
+//     let left = 0;
+//     let right = nums.length - 1;
 
-    while (left <= right) {
-        console.log('-------------------------------AFTER-----COMPUTATION---------------------------------------------')
-        console.log('left index:    ', left);
-        console.log('right index:   ', right);
-        console.log('-------------------------------AFTER-----COMPUTATION---------------------------------------------')
-        console.log('left number:  ', nums[left]);
-        console.log('right number: ', nums[right]);
-        if (nums[left] > nums[right]) {
-            left++;
-        } else {
-            right--;
+//     while (left <= right) {
+//         console.log('-------------------------------AFTER-----COMPUTATION---------------------------------------------')
+//         console.log('left index:    ', left);
+//         console.log('right index:   ', right);
+//         console.log('-------------------------------AFTER-----COMPUTATION---------------------------------------------')
+//         console.log('left number:  ', nums[left]);
+//         console.log('right number: ', nums[right]);
+//         if (nums[left] > nums[right]) {
+//             left++;
+//         } else {
+//             right--;
+//         }
+
+//         //
+//         console.log('-------------------------------AFTER-----COMPUTATION---------------------------------------------')
+//         console.log('left index:    ', left);
+//         console.log('right index:   ', right);
+//         console.log('-------------------------------AFTER-----COMPUTATION---------------------------------------------')
+//     }
+
+//     return left;
+// }
+
+// console.log(countRotations([7,8,9,10,11,1,2,3,4,5,6]))
+
+// Maximum product sub array
+
+function maximumProductSubArray(nums) {
+    let minHere = nums[0];
+    let maxHere = nums[0];
+    let result = nums[0];
+
+    for (let i=1;i<nums.length; i++) {
+        if (nums[i] < 0) {
+            [maxHere, minHere] = [minHere, maxHere]
         }
 
-        //
-        console.log('-------------------------------AFTER-----COMPUTATION---------------------------------------------')
-        console.log('left index:    ', left);
-        console.log('right index:   ', right);
-        console.log('-------------------------------AFTER-----COMPUTATION---------------------------------------------')
+        maxHere = Math.max(nums[i], nums[i] * maxHere);
+        minHere = Math.min(nums[i], nums[i] * minHere);
+        result = Math.max(result, maxHere);
     }
 
-    return left;
+    return result;
 }
 
-console.log(countRotations([7,8,9,10,11,1,2,3,4,5,6]))
+
+console.log('Max product sub array: ', maximumProductSubArray([2, 3, -2, 4]))
