@@ -142,23 +142,71 @@
 
 // Maximum product sub array
 
-function maximumProductSubArray(nums) {
-    let minHere = nums[0];
-    let maxHere = nums[0];
-    let result = nums[0];
+// function maximumProductSubArray(nums) {
+//     let minHere = nums[0];
+//     let maxHere = nums[0];
+//     let result = nums[0];
 
-    for (let i=1;i<nums.length; i++) {
-        if (nums[i] < 0) {
-            [maxHere, minHere] = [minHere, maxHere]
+//     for (let i=1;i<nums.length; i++) {
+//         if (nums[i] < 0) {
+//             [maxHere, minHere] = [minHere, maxHere]
+//         }
+
+//         maxHere = Math.max(nums[i], nums[i] * maxHere);
+//         minHere = Math.min(nums[i], nums[i] * minHere);
+//         result = Math.max(result, maxHere);
+//     }
+
+//     return result;
+// }
+
+
+// console.log('Max product sub array: ', maximumProductSubArray([2, 3, -2, 4]))
+
+// function maximumProductSubArray(nums) {
+//     let minHere = nums[0];
+//     let maxHere = nums[0];
+//     let result = nums[0];
+
+//     for (let i=1; i<nums.length; i++) {
+//         if (nums[i] < 0) {
+//             [maxHere, minHere] = [minHere, maxHere];
+//         }
+
+//         maxHere = Math.max(nums[i], nums[i] * maxHere);
+//         minHere = Math.min(nums[i], nums[i] * minHere);
+//         result = Math.max(result, maxHere);
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
+function maximumProductSubArrayTwo(arr) {
+    let minProd = arr[0];
+    let maxProd = arr[0];
+    let result = arr[0];
+
+    for (let i = 1; i < arr.length; i++) {
+        const currentNum = arr[i];
+        if (currentNum < 0) {
+            [minProd, maxProd] = [maxProd, minProd]
         }
-
-        maxHere = Math.max(nums[i], nums[i] * maxHere);
-        minHere = Math.min(nums[i], nums[i] * minHere);
-        result = Math.max(result, maxHere);
+        minProd = Math.min(currentNum, currentNum * minProd)
+        maxProd = Math.max(currentNum, currentNum * maxProd)
+        result = Math.max(result, maxProd);
     }
 
-    return result;
+    return result
 }
 
-
-console.log('Max product sub array: ', maximumProductSubArray([2, 3, -2, 4]))
+console.log('max prod:  ', maximumProductSubArrayTwo([2, 3, -2, 4]))
+console.log('max prod:  ', maximumProductSubArrayTwo([-2, 0, -1]))
+console.log('max prod:  ', maximumProductSubArrayTwo([-2, 3, -4]))
